@@ -20,7 +20,7 @@ def display_help():
     print("  clear  - Clear the screen")
     print("  exit   - Exit the tool")
     print("\nUsage:")
-    print("Enter a search term, such as 'sudo', to find GTFOBins")
+    print("Enter a search term, such as 'sudo', to find GTFOBins entries")
     print("To use a command, type the command name and press Enter.")
     print("\nExample:")
     print("Search GTFObins: sudo")
