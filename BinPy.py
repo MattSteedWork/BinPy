@@ -5,11 +5,11 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import pickle
 from prettytable import PrettyTable
-import yaml
 
 GTFO_DATA_FILE = 'gtfobins_data.pkl'
 GTFO_BASE_URL = 'https://gtfobins.github.io'
 GTFO_SEARCH_URL = GTFO_BASE_URL + '/#'
+
 
 def display_help():
     print("GTFOBins CLI Tool")
@@ -20,7 +20,7 @@ def display_help():
     print("  clear  - Clear the screen")
     print("  exit   - Exit the tool")
     print("\nUsage:")
-    print("Enter a search term, such as 'sudo', to find GTFOBins entries")
+    print("Enter a search term, such as 'sudo', to find GTFOBins")
     print("To use a command, type the command name and press Enter.")
     print("\nExample:")
     print("Search GTFObins: sudo")
@@ -122,25 +122,12 @@ def banner():
       ░                  ░            ░ ░     
 	""")
 
+
 def main():
     gtfo_entries = load_entries()
 
-    while True:
-        clear_screen()
-        banner()
-        print("\033[1;31;40mType 'help' for more information")
-        query = input("\033[1;36;40mSearch GTFObins: ")
-
-        if query.lower() == 'exit':
-           break
-        elif query.lower() == 'clear':
-            clear_screen()
-            continue
-        elif query.lower() == 'help':
-            display_help()
-            input("\nPress Enter to continue.")
-            continue
-
+    if len(sys.argv) > 1:
+        query = sys.argv[1]
         results = search_entries(gtfo_entries, query)
 
         if not results:
@@ -150,9 +137,34 @@ def main():
                 print(f"{title}: {link}\n")
                 display_entry_content(link)
 
-        input("\nPress Enter to continue \033[1;31;40m(Type 'exit' at the prompt to quit.)")
+    else:
+        while True:
+            clear_screen()
+            banner()
+            print("\033[1;31;40mType 'help' for more information")
+            query = input("\033[1;36;40mSearch GTFObins: ")
+
+            if query.lower() == 'exit':
+               break
+            elif query.lower() == 'clear':
+                clear_screen()
+                continue
+            elif query.lower() == 'help':
+                display_help()
+                input("\nPress Enter to continue.")
+                continue
+
+            results = search_entries(gtfo_entries, query)
+
+            if not results:
+                print("No results found.")
+            else:
+                for title, link in results.items():
+                    print(f"{title}: {link}\n")
+                    display_entry_content(link)
+
+            input("\nPress Enter to continue \033[1;31;40m(Type 'exit' at the prompt to quit.)")
 
 if __name__ == '__main__':
     main()
-
 
